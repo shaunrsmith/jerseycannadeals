@@ -44,6 +44,7 @@
     padding: 6px 10px; border-radius: 999px; font-size: 13px; max-width: 230px; }
   #shopsel:focus { outline: none; border-color: var(--blue); }
   .count { color: var(--muted); font-size: 13px; margin-left: auto; }
+  .geonote { max-width: 1150px; margin: 0 auto; padding: 0 20px 4px; color: var(--gold); font-size: 13px; }
   .grid { max-width: 1150px; margin: 0 auto; padding: 12px 20px 60px; display: grid;
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 8px; }
@@ -132,6 +133,7 @@
     </div>
   </div>
   <div class="controls" id="controls"></div>
+  <div id="geonote" class="geonote" hidden></div>
   <div class="loading" id="loading">Loading today's deals…</div>
   <div class="grid" id="grid"></div>
   <footer id="footer"></footer>
@@ -179,11 +181,21 @@ function haversineMi(a, b) {
   return 2 * R * Math.asin(Math.sqrt(s));
 }
 function distMi(item) { if (!state.userLoc) return null; const c = coordsFor(item.dispensaryId); return c ? haversineMi(state.userLoc, c) : null; }
+function geoNote(msg) {
+  const el = document.getElementById('geonote');
+  if (!el) return;
+  el.textContent = msg || '';
+  el.hidden = !msg;
+  clearTimeout(window._geoTimer);
+  if (msg) window._geoTimer = setTimeout(() => { el.hidden = true; }, 6000);
+}
 function nearMe() {
-  if (!navigator.geolocation) { alert('Geolocation not supported on this browser.'); return; }
+  if (!window.isSecureContext) { geoNote('📍 Location needs a secure (https) connection.'); return; }
+  if (!navigator.geolocation) { geoNote('📍 Location isn’t supported on this browser.'); return; }
+  geoNote('📍 Getting your location…');
   navigator.geolocation.getCurrentPosition(
-    (p) => { state.userLoc = { lat: p.coords.latitude, lng: p.coords.longitude }; state.sort = 'nearest'; renderControls(); render(); },
-    () => { alert('Turn on location to sort by nearest dispensary.'); }
+    (p) => { state.userLoc = { lat: p.coords.latitude, lng: p.coords.longitude }; state.sort = 'nearest'; geoNote(''); renderControls(); render(); },
+    () => { geoNote('📍 Allow location access in your browser to sort by nearest shop.'); }
   );
 }
 
@@ -337,7 +349,5 @@ async function load() {
 }
 load();
 </script>
-
-<!--JCD_NEW_BADGE_START--><style>#jcd-new-pill{position:fixed;right:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;background:#123a1d;color:#34d058;border:1px solid #1f6b35;border-radius:999px;padding:10px 14px;font:600 14px/1 -apple-system,system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.4)}#jcd-new-pill:hover{background:#164a26}</style><a id="jcd-new-pill" href="new-today.html">🔥 New today · 225</a><!--JCD_NEW_BADGE_END-->
 </body>
 </html>
