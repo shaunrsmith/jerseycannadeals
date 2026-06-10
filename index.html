@@ -369,7 +369,7 @@ function renderControls() {
 async function load() {
   // Contact inbox for "suggest a shop" + dispensary (featured-placement) inquiries.
   // Change to your preferred address (set up the alias/forward first).
-  const CONTACT_EMAIL = 'hello@jerseycannadeals.com';
+  const CONTACT_EMAIL = 'deals@jerseycannadeals.com';
   const mailLink = (subject, body, label) =>
     `<a href="mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}" style="color:var(--gold)">${label}</a>`;
   try {
@@ -399,6 +399,5 @@ async function load() {
 }
 load();
 </script>
-<!--JCD_NEW_BADGE_START--><style>#jcd-new-pill{position:fixed;right:14px;bottom:14px;z-index:9999;display:inline-flex;align-items:center;gap:6px;background:#123a1d;color:#34d058;border:1px solid #1f6b35;border-radius:999px;padding:10px 14px;font:600 14px/1 -apple-system,system-ui,sans-serif;text-decoration:none;box-shadow:0 4px 16px rgba(0,0,0,.4)}#jcd-new-pill:hover{background:#164a26}</style><a id="jcd-new-pill" href="new-today.html">🔥 New today · 4</a><!--JCD_NEW_BADGE_END-->
 </body>
 </html>
